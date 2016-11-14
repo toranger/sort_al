@@ -3,7 +3,8 @@
 //two kind of the bubble sort
 //1.the right side
 /**
- * @brief right_bubble 
+ * @brief right_bubble 用i记录冒泡多少次
+ * 
  *
  * @param arr the arr of the number
  * @param len the length of the arr
