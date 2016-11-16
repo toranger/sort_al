@@ -1,9 +1,14 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<limits.h>//INT_MAX int biggest num
 #include"show.h"
 
-//notice when finish the code find the seg default  
-//becasue of : in merge_sort the mid = (low+high)/2
+//notice when finish the code find   
+// seg default becasue of : in merge_sort the mid = (low+high)/2
+// wrong sort  becasue of : when merge the two arr the index i or j 
+//							cross the line
+//						    final use the biggest num to be the line of the 
+//							son arr
 
 /**
  * @brief merge 
@@ -18,8 +23,8 @@ void merge(int arr[],int low, int mid, int high){
 	//count the num of the arr you want to init;
 	int size_l = mid - low + 1;		
 	int size_r = high - mid ;
-	int arr_l[size_l];
-	int arr_r[size_r];
+	int arr_l[size_l+1];
+	int arr_r[size_r+1];
 	int i;
 	int j;
 	int k;
@@ -31,17 +36,20 @@ void merge(int arr[],int low, int mid, int high){
 	for(j=0;j<size_r;j++){
 		arr_r[j] = arr[mid+j+1];	
 	}
+	//put the biggest int num to the end of son arr
+	arr_l[size_l] = INT_MAX;
+	arr_r[size_r] = INT_MAX;
 	i = 0;
 	j = 0;
 	//select num from each arr into the arr index from low to high
 	for(k = low;k<=high;k++){
-		if(arr_l[i] <= arr_r[j]){
+		if(arr_l[i] <= arr_r[j] ){
 			arr[k] = arr_l[i];
 			i++;
 		}else{
 			arr[k] = arr_r[j];	
 			j++;	
-		}
+		}	
 	
 	}
 	return ;
