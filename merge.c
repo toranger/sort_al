@@ -14,6 +14,7 @@
  * @brief merge 
  * 将两个已经排好序的数组合并到原数组中
 	*the min is the low = 0 mid = 0 high = 1
+	利用limits库函数中int的最大值INT_MAX
  * @param arr[]]
  * @param low
  * @param mid
@@ -80,11 +81,99 @@ void merge_sort(int arr[],int low, int high){
 	}
 	return ;
 }
+
+
+
+//-------------------------------------------------------------------
+/**
+ * @brief merge_flag 
+ * 利用flag表示去判断左右数组是否越位 而非最大值
+ *
+ * @param arr[]]
+ * @param low
+ * @param mid
+ * @param high
+ */
+void merge_flag(int arr[],int low, int mid, int high){
+	//count the num of the arr you want to init;
+	int size_l = mid - low + 1;		
+	int size_r = high - mid ;
+	int arr_l[size_l];
+	int arr_r[size_r];
+	int i;
+	int j;
+	int k;
+	int outband_l = 0;
+	int outband_r = 0;
+	//put the left num in arr to the arr_l	
+	for(i=0;i<size_l;i++){
+		arr_l[i] = arr[low+i];	
+	}
+	//put the right num in arr to the arr_r
+	for(j=0;j<size_r;j++){
+		arr_r[j] = arr[mid+j+1];	
+	}
+	i = 0;
+	j = 0;
+	//select num from each arr into the arr index from low to high
+	for(k = low;k<=high;k++){
+		//whether outband
+		if(outband_l == 1 && outband_r == 0){
+			arr[k] = arr_r[j];	
+			j++;	
+			if(j >= size_r){
+				outband_r = 1;	
+			}
+			continue;
+		}
+		if(outband_r == 1 && outband_l == 0){
+			arr[k] = arr_l[i];	
+			i++;	
+			if(i >= size_l){
+				outband_l = 1;	
+			}
+			continue;
+		}
+		if(arr_l[i] <= arr_r[j] ){
+			arr[k] = arr_l[i];
+			i++;
+			if(i >= size_l){
+				outband_l = 1;	
+			}
+		}else{
+			arr[k] = arr_r[j];	
+			j++;	
+			if(j >= size_r){
+				outband_r = 1;	
+			}
+		}	
+	
+	}
+	return ;
+
+}
+void merge_sort_flag(int arr[],int low, int high){
+	if(arr == NULL){
+		return ;	
+	}	
+	int mid;
+	//若low >= high则该字数组最多有一个元素
+	if(low < high){
+		mid = (low+high)/2;	
+		merge_sort_flag(arr, low ,mid);	
+		merge_sort_flag(arr,mid+1,high);
+		merge_flag(arr,low,mid,high);
+	}
+	return ;
+}
 int main()
 {
 	int arr[6] = {5,2,4,6,1,3};
+	int arr1[6] = {5,2,4,6,1,3};
 	merge_sort(arr,0,5);
+	merge_sort_flag(arr1,0,5);
 	show(arr,6);
+	show(arr1,6);
 	return 0;
 
 }
