@@ -5,10 +5,7 @@
 
 //notice when finish the code find   
 // seg default becasue of : in merge_sort the mid = (low+high)/2
-// wrong sort  becasue of : when merge the two arr the index i or j 
-//							cross the line
-//						    final use the biggest num to be the line of the 
-//							son arr
+// wrong sort  becasue of : when merge the two arr the index i or j cross the line final use the biggest num to be the line of the son arr
 
 /**
  * @brief merge 
