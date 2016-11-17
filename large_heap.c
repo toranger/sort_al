@@ -58,7 +58,7 @@ void build_max_heap(int arr[], int len){
 		return;
 	int i;//the index
 	//from the end to the front let the root meet the max_heapify
-	for(i = (len-1)/2;i>=0;i++){
+	for(i = (len-1)/2;i>=0;i--){
 		max_heapify(arr,i,len);	
 	}
 	return ;
