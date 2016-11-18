@@ -7,6 +7,7 @@
  * @brief 桶排序类似于计数排序根据最大值和最小值取hash链表大小 
  * 将对应数放到对应hash链中 ，链中用插入排序排好
  * 最后遍历链表把数组成arr
+ * 此处省略free  hashlist 以及 node内存 Free();
  * @author tmd
  * @version 1.0
  * @date 2016-11-18
@@ -28,6 +29,9 @@ void push(Node** list,int value){
 	tmp->value = value;
 	if((*list) == NULL){
 		//对应链表为空	
+		Node* head = (Node*)malloc(sizeof(Node));
+		(*list) = head;
+		head->value = 1;
 		tmp->pNext = (*list);
 		tmp->pPre = (*list);
 		(*list)->pNext = tmp;
@@ -38,8 +42,8 @@ void push(Node** list,int value){
 		tmp->pPre = (*list);
 		(*list)->pNext->pPre = tmp;
 		(*list)->pNext = tmp;
+		((*list)->value)++;
 	}
-	((*list)->value)++;
 	return ;
 
 }
@@ -48,26 +52,30 @@ void push(Node** list,int value){
  * 同时将排序好的数放到原数组中
  *
  * @param list
+ * @param arr_origin[]
+ * @param len the length of the arr_origin
+ * @param have  the index to insert to the arr_origin
+ *
+ * @return     the index which this list num after this hash list num insert
+ * to the arr_origin
  */
-void insert_sort(Node* list ,int arr_origin[], int len){
-	if(list == NULL || arr_origin == NULL || len <= 0)
-		return ;
-	int num;
-	int index = 0;
+int insert_sort(Node* list ,int arr_origin[], int len,int have){
+	if(list == NULL || arr_origin == NULL || len <= 0 || have == -1)
+		return -1 ;
 	int arr_len = (list)->value;
 	int arr[arr_len];
 	int i;
 	int j;
 	int key;
 	int tmp;
-	Node* start = (list)->pNext;
 	//put the num into the arr
-	while(start->pNext != (list)){
-		num = start->value;
-		arr[index] = num;		
-		start = start->pNext;
-		index++;
+	int count = list->value;
+	list = list->pNext;
+	for(i = 0;i < count;i++){
+		arr[i] = list->value;	
+		list = list->pNext;
 	}
+
 	for(i = 1;i < arr_len;i++){
 		key = arr[i];	
 		j = i - 1;
@@ -81,11 +89,11 @@ void insert_sort(Node* list ,int arr_origin[], int len){
 		arr[j+1] = key;
 	}
 	//put the order arr num to the origin arr 
-	start = (list)->pNext;
 	for(i = 0;i < arr_len;i++){
-		arr_origin[i] = arr[i];
+		arr_origin[have++] = arr[i];
 	}
-	return ;
+
+	return have;
 }
 /**
  * @brief bucket_sort 
@@ -102,6 +110,7 @@ void bucket_sort(int arr[], int len){
 	int MAX;
 	int size;
 	int i;
+	int have = 0 ;
 	
 	//get the min and max num in arr
 	for(i = 0;i < len;i++){
@@ -127,8 +136,12 @@ void bucket_sort(int arr[], int len){
 	//use the insert sort to sort the each hash list 
 	//and get the in order num in hash list to the arr
 	for(i = 0;i < size;i++){
-		insert_sort(hash_arr[i],arr,len);	
+		have = insert_sort(hash_arr[i],arr,len,have);	
 	}
+
+	//last to free hash_arr and the node in each hash_list;
+	//there to omitted
+	//Free(hash_arr,size);
 	return ;
 }
 
