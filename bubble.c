@@ -10,6 +10,8 @@
  * @param len the length of the arr
  */
 void right_bubble(int *arr, int len){
+	if(NULL == arr || len <= 0)
+		return;
 	int i;
 	int j;
 	int tmp;
@@ -63,9 +65,13 @@ int main()
 {
 	int arr_left[6] = {5,2,4,6,1,3};		
 	int arr_right[6] = {5,2,4,6,1,3};		
+	int *arr = NULL;
+	int *arr_out;
 	left_bubble(arr_left, 6);
 	show(arr_left,6);
 	right_bubble(arr_right,6);
+	right_bubble(arr,6);
+	right_bubble(arr_out,6);
 	show(arr_right,6);
 
 	return 0;
